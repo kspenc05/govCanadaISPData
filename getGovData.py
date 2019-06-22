@@ -93,7 +93,7 @@ if("Municipality,Province" not in first_line):
 checkpoint = open("checkpoint.txt", "a+")
 checkpoint.seek(0)
 
-starting_point = checkpoint.read(1)
+starting_point = checkpoint.readline()
 if(starting_point == None or starting_point == ''):
 	starting_point = 0
 else:
@@ -161,5 +161,7 @@ except KeyboardInterrupt as k:
 except Exception as e:	
 	make_checkpoint(checkpoint, i - 1)
 	print("the script has encountered an unexpected error and has stopped running. Please refer to the error message(s) above and/or below.")
+	print(traceback.format_exc())
+	cleanup(driver, checked, checkpoint)
 	print(traceback.format_exc())
 	cleanup(driver, checked, checkpoint)

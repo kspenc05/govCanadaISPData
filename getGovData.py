@@ -53,7 +53,7 @@ def get_div_values (category, horizontal_placement):
 def make_checkpoint(checkpoint, number_of_places_checked):
 	checkpoint.seek(0)
 	if(i > 0):
-		checkpoint.write("%d\n" % number_of_places_checked)
+		checkpoint.write(str(number_of_places_checked))
 	else:
 		checkpoint.write("0\n")
 
@@ -98,6 +98,8 @@ if(starting_point == None or starting_point == ''):
 	starting_point = 0
 else:
 	starting_point = int(starting_point)
+	
+print(starting_point)
 
 checkpoint.close()
 checkpoint = open("checkpoint.txt", "w")
@@ -131,14 +133,18 @@ try:
 
 		# # > "number_to_Skip" is used so that we skip over estimated population and households, which are the first 4 values
 		# # > These values also have a different div structure, and the xpath that I'm using will break on them
-		for i in range(number_to_skip, numberOfCategories):
-			category = xpath_area_info_tab + "/div[" + str(i) + "]"
+		for j in range(number_to_skip, numberOfCategories):
+			category = xpath_area_info_tab + "/div[" + str(j) + "]"
 			technologies = driver.find_elements_by_xpath(category)
 	
 			for column in (1,2):
 				get_div_values(category, column)
 		inputElement.clear()
-		print(place)
+		
+		# # > delay, so that the script behaves more like a regular user (taking a break between entries)
+		print("MANDATORY 30 SECOND DELAY --- you can stop thes script at any time ---\n")
+		time.sleep(30)
+		print("JUST CHECKED: " + place)
 		print("\nFinished checking, Recording progress...\n")
 		record_progress(checked, checkpoint, place, i)
 		
@@ -149,19 +155,14 @@ try:
 		HCTS = []
 		mobile_wireless = []
 		satellite = []
-		
-		# # > delay, so that the script behaves more like a regular user (taking a break between entries)
-		time.sleep(30)
 	cleanup(driver, checked, checkpoint)
 	
 except KeyboardInterrupt as k:
-	make_checkpoint(checkpoint, i - 1)
+	make_checkpoint(checkpoint, i)
 	cleanup(driver, checked, checkpoint)
 
 except Exception as e:	
-	make_checkpoint(checkpoint, i - 1)
+	make_checkpoint(checkpoint, i)
 	print("the script has encountered an unexpected error and has stopped running. Please refer to the error message(s) above and/or below.")
-	print(traceback.format_exc())
-	cleanup(driver, checked, checkpoint)
 	print(traceback.format_exc())
 	cleanup(driver, checked, checkpoint)

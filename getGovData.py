@@ -83,8 +83,8 @@ import sys
 import os
 from selenium import webdriver
 
-checked = open("checked.txt", "a+")
-with open("checked.txt", "r") as rd_only:
+checked = open("checked.csv", "a+")
+with open("checked.csv", "r") as rd_only:
 	first_line = rd_only.readline()
 	
 if("Municipality,Province" not in first_line):
